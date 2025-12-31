@@ -1,24 +1,25 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import HTTPException
 from pydantic import BaseModel
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Prontuário Fisioterapia")
+app = FastAPI()
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# MODELO DE DADOS
 class Login(BaseModel):
     email: str
     senha: str
+    
+@app.get("/")
+def root():
+    return {"status": "ok"}
 
-# USUÁRIO FIXO (TESTE)
 USUARIO_TESTE = {
     "email": "admin@clinica.com",
     "senha": "123"
