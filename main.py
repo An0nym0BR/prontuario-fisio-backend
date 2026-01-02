@@ -1,13 +1,11 @@
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
-
-from typing import List
-from fastapi import FastAPI, Depends
+from typing import List, Optional
+from datetime import date
 from sqlalchemy.orm import Session
-
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -46,11 +44,9 @@ class Paciente(BaseModel):
     nome: str
     cpf: str
     telefone: str
-    idade: int
-    sexo: str
-    data_nascimento: str
-    
-    diagnostico: str
+    diagnostico: Optional[str] = None
+    sexo: Optional[str] = None
+    data_nascimento: Optional[date] = None
     queixa_principal: Optional[str] = None
     historico_clinico: Optional[str] = None
     medicacoes: Optional[str] = None
@@ -154,7 +150,9 @@ def login(dados: LoginRequest):
         }
     }
 
-
+################
+# CRIAR PACIENTE
+################
 @app.post("/pacientes")
 def criar_paciente(paciente: PacienteCreate, db: Session = Depends(get_db)):
     novo = Paciente(**paciente.dict())
@@ -163,7 +161,9 @@ def criar_paciente(paciente: PacienteCreate, db: Session = Depends(get_db)):
     db.refresh(novo)
     return novo
 
-
+##################
+# LISTAR PACIENTES
+##################
 @app.get("/pacientes")
 def listar_pacientes(db: Session = Depends(get_db)):
     return db.query(Paciente).all()
