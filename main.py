@@ -9,6 +9,57 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+
+# ========================
+# MODELOS PYDANTIC
+# ========================
+
+class PacienteCreate(BaseModel):
+   nome: str
+    cpf: str
+    telefone: str
+    diagnostico: Optional[str] = None
+    sexo: Optional[str] = None
+    data_nascimento: Optional[date] = None
+    queixa_principal: Optional[str] = None
+    historico_clinico: Optional[str] = None
+    medicacoes: Optional[str] = None
+    observacoes: Optional[str] = None
+
+class PacienteResponse(BaseModel):
+    id: int
+    nome: str
+    cpf: str
+    telefone: str
+    diagnostico: Optional[str] = None
+
+class Config:
+        from_attributes = True
+        
+
+class Paciente(BaseModel):
+    nome: str
+    cpf: str
+    telefone: str
+    diagnostico: Optional[str] = None
+    sexo: Optional[str] = None
+    data_nascimento: Optional[date] = None
+    queixa_principal: Optional[str] = None
+    historico_clinico: Optional[str] = None
+    medicacoes: Optional[str] = None
+    observacoes: Optional[str] = None
+
+class LoginRequest(BaseModel):
+    email: str
+    senha: str
+
+
+class Profissional(BaseModel):
+    nome: str
+    email: str
+    senha: str
+    
+
 # ========================
 # APP
 # ========================
@@ -43,31 +94,6 @@ def get_db():
 
 Base = declarative_base()
 
-# ========================
-# MODELOS PYDANTIC
-# ========================
-
-class Paciente(BaseModel):
-    nome: str
-    cpf: str
-    telefone: str
-    diagnostico: Optional[str] = None
-    sexo: Optional[str] = None
-    data_nascimento: Optional[date] = None
-    queixa_principal: Optional[str] = None
-    historico_clinico: Optional[str] = None
-    medicacoes: Optional[str] = None
-    observacoes: Optional[str] = None
-
-class LoginRequest(BaseModel):
-    email: str
-    senha: str
-
-
-class Profissional(BaseModel):
-    nome: str
-    email: str
-    senha: str
 
 # ========================
 # MODELOS DO BANCO
